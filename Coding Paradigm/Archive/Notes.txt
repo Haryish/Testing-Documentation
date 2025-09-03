@@ -1,0 +1,10 @@
+Printing, Commentong, Debuggging and string Manupilation
+
+Welcome to Band Name Generator.
+What's name of the city you grew up in?
+Briston
+What's your pet name?
+Rabbit
+Your band name could be <Briston><Rabbit>
+
+https://www.geeksforgeeks.org/python-interview-questions/
