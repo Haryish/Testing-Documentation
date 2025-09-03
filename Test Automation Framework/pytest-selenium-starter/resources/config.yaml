@@ -1,0 +1,10 @@
+default_env: dev
+envs:
+  dev:
+    base_url: "https://www.saucedemo.com/"
+    username: "standard_user"
+    password: "secret_sauce"
+  qa:
+    base_url: "https://www.saucedemo.com/"
+    username: "standard_user"
+    password: "secret_sauce"
