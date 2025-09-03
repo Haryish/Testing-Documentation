@@ -1,0 +1,39 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+    stage('Setup Python') {
+      steps {
+        sh 'python3 -m venv venv'
+        sh '. venv/bin/activate && python -m pip install --upgrade pip'
+        sh '. venv/bin/activate && pip install -r requirements.txt'
+      }
+    }
+    stage('Smoke Tests') {
+      steps {
+        sh '. venv/bin/activate && pytest -m smoke --headless --browser=chrome'
+      }
+    }
+    stage('Regression Tests (optional)') {
+      when { expression { return false } } // flip to true in real pipelines
+      steps {
+        sh '. venv/bin/activate && pytest -m regression --headless --browser=chrome -n auto'
+      }
+    }
+    stage('Publish Report') {
+      steps {
+        publishHTML target: [allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'reports', reportFiles: 'report.html', reportName: 'Pytest Report']
+        archiveArtifacts artifacts: 'reports/**', fingerprint: true
+      }
+    }
+  }
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: '**/junit*.xml'
+    }
+  }
+}
